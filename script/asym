@@ -1,0 +1,7 @@
+#!perl
+use Mojo::Base -strict, -signatures, -async;
+use App;
+
+my $exit;
+App->new->install(@ARGV)->catch(sub (@) { $exit = 1 })->wait;
+exit $exit;
