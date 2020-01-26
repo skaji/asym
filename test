@@ -1,9 +1,10 @@
 #!/usr/bin/env perl
-use Mojo::Base -strict, -signatures, -async;
+use Mojo::Base -strict, -signatures, -async_await;
 use Mojo::Promise;
 use Mojo::Util 'dumper';
 use lib "lib";
 use App;
+use Req;
 
 my $app = App->new;
 
@@ -11,8 +12,8 @@ my $exit = 0;
 
 Mojo::Promise
     ->all(
-        $app->install('App::cpm'),
-        $app->install('App::FatPacker'),
+        $app->install(Req->new('App::cpm')),
+        $app->install(Req->new('App::FatPacker')),
     )->catch(
         sub (@err) { warn dumper \@err; $exit = 1 }
     )->wait;

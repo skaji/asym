@@ -1,5 +1,5 @@
 #!perl
-use Mojo::Base -strict, -signatures, -async;
+use Mojo::Base -strict, -signatures, -async_await;
 use App;
 
 my $exit;

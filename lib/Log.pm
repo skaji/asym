@@ -1,5 +1,5 @@
 package Log;
-use Mojo::Base -base, -signatures, -async;
+use Mojo::Base -base, -signatures, -async_await;
 
 use POSIX ();
 

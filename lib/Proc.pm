@@ -1,13 +1,10 @@
-package Proc;
-use Mojo::Base -strict, -signatures, -async;
+package Mojo::Proc;
+use Mojo::Base -strict, -signatures, -async_await;
 
 use Mojo::IOLoop::Stream;
 use Mojo::IOLoop;
 use Mojo::Promise;
 use POSIX ();
-
-use Exporter 'import';
-our @EXPORT_OK = qw(run);
 
 my $EV = Mojo::IOLoop->singleton->reactor->isa('Mojo::Reactor::EV');
 

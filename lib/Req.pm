@@ -1,5 +1,5 @@
 package Req;
-use Mojo::Base -base, -signatures, -async;
+use Mojo::Base -base, -signatures, -async_await;
 
 has package => undef;
 has range => undef;
