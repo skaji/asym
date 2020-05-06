@@ -11,6 +11,10 @@ has meta => undef;
 has mymeta => undef;
 has provides => undef;
 
+async sub load ($class, $dir) {
+    $class->new(dir => $dir)->load_meta->load_provides;
+}
+
 sub reqs ($self, $phase) {
     my $meta = $phase eq 'configure' ? $self->meta : $self->mymeta;
     return [] if !$meta;
@@ -50,19 +54,37 @@ sub is_mb ($self) {
 }
 
 sub name ($self) {
-    $self->dir =~ s{.*/}{}r;
+    $self->{dir} ||= $self->dir =~ s{.*/}{}r;
 }
 
-sub cmd_configure ($self) {
-    $self->is_mb ? [$^X, "Build.PL"] : [$^X, "Makefile.PL"];
+async sub configure ($self, $proc, $log) {
+    my @cmd = $self->is_mb ? ($^X, "Build.PL") : ($^X, "Makefile.PL");
+    my $exit = await $proc->run(
+        cmd => \@cmd,
+        dir => $self->dir,
+        out => $log,
+    );
+    $exit == 0 && $self->load_mymeta && 1;
 }
 
-sub cmd_build ($self) {
-    $self->is_mb ? ["./Build"] : [$Config{make}];
+async sub build ($self, $proc, $log) {
+    my @cmd = $self->is_mb ? ("./Build") : ($Config{make});
+    my $exit = await $proc->run(
+        cmd => \@cmd,
+        dir => $self->dir,
+        out => $log,
+    );
+    $exit == 0;
 }
 
-sub cmd_test ($self) {
-    $self->is_mb ? ["./Build", "test"] : [$Config{make}, "test"];
+async sub test ($self, $proc, $log) {
+    my @cmd = $self->is_mb ? ("./Build", "test") : ($Config{make}, "test");
+    my $exit = await $proc->run(
+        cmd => \@cmd,
+        dir => $self->dir,
+        out => $log,
+    );
+    $exit == 0;
 }
 
 1;

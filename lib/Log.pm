@@ -16,6 +16,7 @@ sub new ($class, %argv) {
 sub print ($self, $name, $byte) {
     my $time = POSIX::strftime("%FT%T", localtime);
     $self->fh->say("$time,$name| $_") for split /\n/, $byte;
+    STDERR->say("$name $_") for split /\n/, $byte;
 }
 
 sub cb ($self, $name) {
