@@ -50,7 +50,7 @@ sub load_provides ($self) {
 }
 
 sub is_mb ($self) {
-    $self->build_type eq 'mb';
+    $self->{is_mb} //= -f $self->dir->child('Build.PL') ? 1 : 0;
 }
 
 sub name ($self) {
