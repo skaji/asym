@@ -6,15 +6,15 @@ use Dist;
 use Log;
 use Mojo::File;
 use Mojo::UserAgent;
-use Mojo::Promise::Limitter::UserAgent;
-use Mojo::Promise::Limitter::Proc;
+use Mojo::Promise::Limiter::UserAgent;
+use Mojo::Promise::Limiter::Proc;
 use YAML::PP ();
 use Repo;
 
 use Mojo::Util 'dumper';
 
-has http => sub ($self) { Mojo::Promise::Limitter::UserAgent->new(5) };
-has proc => sub ($self) { Mojo::Promise::Limitter::Proc->new(5) };
+has http => sub ($self) { Mojo::Promise::Limiter::UserAgent->new(5) };
+has proc => sub ($self) { Mojo::Promise::Limiter::Proc->new(5) };
 has workdir => sub ($self) { Mojo::File->new("work-" . time)->make_path };
 has log => sub ($self) { Log->new(path => $self->workdir->child("build.log")) };
 has repo => sub ($self) { Repo->new };
